@@ -1,41 +1,27 @@
-# credits:
-# adapted from https://realpython.com/how-to-make-a-discord-bot-python/
+"""
+Starts up the bot, creates a connection with target server,
+then prints out the server's name and id.
 
-import os
-import discord
-from dotenv import load_dotenv
+Credits:
+adapted from https://realpython.com/how-to-make-a-discord-bot-python/
+"""
 
-# load_dotenv()
-# TOKEN = os.getenv('DISCORD_TOKEN')
-# GUILD = os.getenv('DISCORD_GUILD')
+from func import *
 
-# intents = discord.Intents.default()
-# client = discord.Client(intents=intents)
+intents = discord.Intents.default()
+client = discord.Client(intents=intents)
 
-# @client.event
-# async def on_ready():
-#     print(f'{client.user} has connected to Discord!')
-
-# client.run(TOKEN)
-
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
-
-client = discord.Client()
 
 @client.event
 async def on_ready():
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
-
+    guild = discord.utils.get(client.guilds, name=GUILD)
     print(
         f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})\n'
+        f'{guild.name}(id: {guild.id})'
     )
 
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Guild Members:\n - {members}')
+    # coroutine has to be awaited
+    await run(client)
+
 
 client.run(TOKEN)
