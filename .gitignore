@@ -1,0 +1,5 @@
+# discord token file (private)
+/.env
+
+# PyCharm system files
+/.idea/
