@@ -16,7 +16,7 @@ def init(c: discord.Client):
     print(f"{c.user} is connected to the following guild:\n"
           f"{guild.name}(id: {guild.id})\n"
           f"Time: {datetime.now().strftime('%H:%M:%S')}"
-    )
+          )
 
 
 async def command(c: discord.Client, msg: list[str],
@@ -32,10 +32,16 @@ async def command(c: discord.Client, msg: list[str],
     """
     if len(msg) < 2:
         raise ValueError("Cannot execute empty command")
-    if msg[1] == "echo":
-        await echo(c, msg, channel)
+
+    cmd = msg[1]
+    if cmd == "echo":
+        await _echo(c, msg, channel)
+    elif cmd == "getKey":
+        await _get_key(c, channel)
+    elif cmd == "setKey":
+        await _set_key(c, msg, channel)
     else:
-        raise ValueError(f"{msg} is not a valid command")
+        raise ValueError(f'"{cmd}" is not a valid command')
 
 
 async def send_msg(c: discord.Client, text: str,
@@ -65,27 +71,46 @@ def send_user():
 
 
 # ===== COMMANDS ===== #
-def change_command_keyword(c: discord.Client, key: str):
-    """
-    Changes the keyword for regular bot commands.
-    :param c:
-    :param key: new keyword.
-    :raise ValueError: if `key` contains more than `KEYWORD_LENGTH` characters.
-    """
-    assert isinstance(key, str)
-    if len(key) > KEYWORD_LENGTH:
-        raise ValueError("Provided key is too long")
-    c.cmd_key = key
-
-
-async def echo(c, msg, channel):
+async def _echo(c: discord.Client, msg: list[str],
+                channel: discord.TextChannel | discord.Thread):
     """
     Echos the message inputted by user.
     :param c:
     :param msg: list of words in message inputted by a user in Discord server.
-    :param channel:
-    :return:
+    :param channel: Channel object corresponding to the channel in which the
+     user sent the message.
+    :raise ValueError: if no message is specified.
     """
     if len(msg) < 3:
         raise ValueError("echo: empty message")
     await send_msg(c, msg[2], channel)
+
+
+async def _get_key(c, channel):
+    """
+    Displays current keyword and sends it as a message to user.
+    :param c:
+    :param channel:
+    """
+    await send_msg(c, "The keyword for this bot is currently set to "
+                      f"`{c.cmd_key}`.", channel)
+
+
+async def _set_key(c, msg, channel):
+    """
+    Changes the keyword for regular bot commands.
+    :param c:
+    :param msg:
+    :param channel:
+    :raise ValueError: if `key` contains more than `KEYWORD_LENGTH` characters.
+    """
+    if len(msg) < 3:
+        raise ValueError("setKey: cannot set keyword to empty variable")
+
+    key = msg[2]
+    if len(key) > KEYWORD_LENGTH:
+        raise ValueError("Provided keyword is too long")
+
+    c.cmd_key = key
+    await send_msg(c, f'Keyword has been set to {key}.\n'
+                      "Run `$ getKey` to display current keyword.", channel)
