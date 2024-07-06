@@ -24,6 +24,10 @@ async def command(c: discord.Client, msg: list[str],
     cmd = msg[1]
     if cmd == "echo":
         await _echo(c, msg, channel)
+    elif cmd == "setActivity":
+        await _set_activity(c, msg, channel)
+    elif cmd == "stopActivity":
+        await _stop_activity(c,channel)
     elif cmd == "getKey":
         await _get_key(c, channel)
     elif cmd == "setKey":
@@ -74,11 +78,47 @@ async def _echo(c: discord.Client, msg: list[str],
     await send_msg(c, msg[2], channel)
 
 
+async def _set_activity(c, msg, channel):
+    """
+    Changes the activity of the bot.
+    """
+    if len(msg) < 4:
+        raise ValueError("setActivity: invalid syntax\n"
+                         "Usage: `$ setActivity [category] [name]`")
+
+    valid_activities = ["play", "stream", "listen", "watch"]
+    ctgy: str = msg[2].lower()
+
+    if ctgy not in valid_activities:
+        raise ValueError(f'setActivity: "{ctgy}" is an invalid category.\n'
+                         "Valid categories: `play`, `stream`, `listen`, and "
+                         "`watch`")
+
+    name: str = msg[3]
+    activities = [discord.Game(name=name),
+                  discord.Streaming(name=name, url="https://github.com"),
+                  discord.Activity(type=discord.ActivityType.listening, name=name),
+                  discord.Activity(type=discord.ActivityType.watching, name=name)]
+
+    for i in range(4):
+        if ctgy == valid_activities[i]:
+            await c.change_presence(activity=activities[i])
+
+    await send_msg(c,
+                   f"Successfully changed activity to `{name}`", channel)
+
+
+async def _stop_activity(c, channel):
+    """
+    Stops all activities of the bot.
+    """
+    await c.change_presence(activity=None)
+    await send_msg(c,"Successfully stopped all activities", channel)
+
+
 async def _get_key(c, channel):
     """
     Displays current keyword and sends it as a message to user.
-    :param c:
-    :param channel:
     """
     await send_msg(c, "The keyword for this bot is currently set to "
                       f"`{c.cmd_key}`.", channel)
@@ -87,9 +127,6 @@ async def _get_key(c, channel):
 async def _set_key(c, msg, channel):
     """
     Changes the keyword for regular bot commands.
-    :param c:
-    :param msg:
-    :param channel:
     :raise ValueError: if `key` contains more than `KEYWORD_LENGTH` characters.
     """
     if len(msg) < 3:
@@ -100,7 +137,7 @@ async def _set_key(c, msg, channel):
         raise ValueError("Provided keyword is too long")
 
     c.cmd_key = key
-    await send_msg(c, f'Keyword has been set to {key}.\n'
+    await send_msg(c, f"Keyword has been set to `{key}`.\n"
                       "Run `$ getKey` to display current keyword.", channel)
 
 

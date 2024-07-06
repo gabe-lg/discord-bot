@@ -2,9 +2,11 @@
 A multipurpose discord bot for general purposes.
 
 # Commands
-`$ echo`: echos the message inputted by user.<br>
+`$ echo [message]`: echos the message inputted by user.<br>
+`$ setActivity [category] [name]`: changes the activity of the bot.<br>
+`$ stopActivity`: stops all activities of the bot.
 `$ getKey`: Displays current keyword and sends it as a message to user.<br>
-`$ setKey`: Changes the keyword for regular bot commands.<br>
+`$ setKey [key]`: Changes the keyword for regular bot commands.<br>
 
 # Create an `.env` file
 After cloning this repository, create a file with name `.env` inside the same directory as `bot.py`,
