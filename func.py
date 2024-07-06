@@ -6,24 +6,23 @@ import discord
 from const import *
 
 
-async def run(c: discord.Client):
+async def init(c: discord.Client):
     """
     Runs after the initialization of the bot.
     :param c: `Client` object passed from `bot.py`.
      Required by some functions.
     """
-    await _send_msg(c, "foo", CHANNEL_0)
-
-# ALL ADDITIONAL FUNCTIONS SHOULD BE HIDDEN #
+    await send_msg(c, "foo")
 
 
-# ===== HIDDEN FUNCTIONS ===== #
-async def _send_msg(c, text: str, channel_id: int):
+async def send_msg(c, text: str, channel_id: int = CHANNEL_DEFAULT):
     """
     Sends a message to a channel with id=`channel_id`.
+    :param c:
     :param text: text to be sent.
     :param channel_id: id of target channel. Requires that the target channel is
      in the discord server the bot is active in.
+     Default: `CHANNEL_DEFAULT`
     :raise ValueError: if `channel_id` is not a valid `id`.
     """
     channel = c.get_channel(channel_id)
