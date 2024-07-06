@@ -1,6 +1,11 @@
 # discord-bot
 A multipurpose discord bot for general purposes.
 
+# Commands
+`$ echo`: echos the message inputted by user.<br>
+`$ getKey`: Displays current keyword and sends it as a message to user.<br>
+`$ setKey`: Changes the keyword for regular bot commands.<br>
+
 # Create an `.env` file
 After cloning this repository, create a file with name `.env` inside the same directory as `bot.py`,
 then copy the following code into the file.
