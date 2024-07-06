@@ -4,7 +4,7 @@ A multipurpose discord bot for general purposes.
 # Commands
 `$ echo [message]`: echos the message inputted by user.<br>
 `$ setActivity [category] [name]`: changes the activity of the bot.<br>
-`$ stopActivity`: stops all activities of the bot.
+`$ stopActivity`: stops all activities of the bot.<br>
 `$ getKey`: Displays current keyword and sends it as a message to user.<br>
 `$ setKey [key]`: Changes the keyword for regular bot commands.<br>
 
