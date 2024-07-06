@@ -7,18 +7,6 @@ from const import *
 from datetime import datetime
 
 
-def init(c: discord.Client):
-    """
-    Runs after the initialization of the bot.
-    :param c: `Client` object passed from `bot.py`.
-    """
-    guild = discord.utils.get(c.guilds, name=GUILD)
-    print(f"{c.user} is connected to the following guild:\n"
-          f"{guild.name}(id: {guild.id})\n"
-          f"Time: {datetime.now().strftime('%H:%M:%S')}"
-          )
-
-
 async def command(c: discord.Client, msg: list[str],
                   channel: discord.TextChannel | discord.Thread):
     """
@@ -114,3 +102,40 @@ async def _set_key(c, msg, channel):
     c.cmd_key = key
     await send_msg(c, f'Keyword has been set to {key}.\n'
                       "Run `$ getKey` to display current keyword.", channel)
+
+
+# ===== HELPER FUNCTIONS ===== #
+def msg_split(content: str) -> list[str]:
+    """
+    Splits message into a list of strings. The space character is the
+    delimiter, except when it is wrapped between double quotation marks.
+
+    If `content` contains an odd number of quotation marks, all remaining text
+    after the last quotation mark will not be split and will be appended to the
+    list of strings as a single entry.
+
+    Treats multiple space characters in a row as a single space character, and
+    ignores any trailing space characters.
+
+    :param content: string to be split.
+    :return: the list of strings containing words in `content`.
+    """
+    wrapped_in_quotes: bool = False
+    curr_word: str = ""
+    words: list[str] = []
+
+    for char in content:
+        if char == '"':
+            wrapped_in_quotes = not wrapped_in_quotes
+        elif char == " " and not wrapped_in_quotes:
+            if curr_word != "":
+                words.append(curr_word)
+                curr_word = ""
+        else:
+            curr_word += char
+
+    # for last word
+    if curr_word != "":
+        words.append(curr_word)
+
+    return words
