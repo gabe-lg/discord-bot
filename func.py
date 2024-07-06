@@ -149,6 +149,7 @@ async def _kill(c, channel):
     await send_msg(c, "Bot killed.", channel)
     quit()
 
+
 # ===== HELPER FUNCTIONS ===== #
 def msg_split(content: str) -> list[str]:
     """
