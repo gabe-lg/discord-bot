@@ -3,6 +3,7 @@ Module containing helper functions for the bot
 """
 
 import discord
+from discord.ext import commands
 from const import *
 from datetime import datetime
 
@@ -32,6 +33,8 @@ async def command(c: discord.Client, msg: list[str],
         await _get_key(c, channel)
     elif cmd == "setKey":
         await _set_key(c, msg, channel)
+    elif cmd == "kill":
+        await _kill(c, channel)
     else:
         raise ValueError(f'"{cmd}" is not a valid command')
 
@@ -140,6 +143,11 @@ async def _set_key(c, msg, channel):
     await send_msg(c, f"Keyword has been set to `{key}`.\n"
                       "Run `$ getKey` to display current keyword.", channel)
 
+
+@commands.is_owner()
+async def _kill(c, channel):
+    await send_msg(c, "Bot killed.", channel)
+    quit()
 
 # ===== HELPER FUNCTIONS ===== #
 def msg_split(content: str) -> list[str]:
