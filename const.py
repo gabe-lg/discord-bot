@@ -9,6 +9,18 @@ directory as `bot.py`.
 from os import getenv
 from dotenv import load_dotenv
 
+
+def _id_maker(key: str) -> int | None:
+    """
+    Helper function: converts a `str` with into `int`.
+    :return: an `int` if `key` can be converted into an `int`, otherwise `None`.
+    """
+    try:
+        return int(getenv(key))
+    except (TypeError, ValueError):
+        return None
+
+
 # default keyword for commands
 KEYWORD_DEFAULT = '$'
 
@@ -25,18 +37,16 @@ TOKEN = getenv('TOKEN')
 # Name of guild: the public name of target Discord server.
 GUILD = getenv('GUILD')
 
+# User ID
+# `None` if `getenv` does not return an `int`
+# get from discord app: User Settings > My Account > "Copy Server ID" with dev
+# tools enabled
+USER_ID = _id_maker("USER_ID")
+
 # ===== Discord channels ===== #
 # Channel id
 # `None` if `getenv` does not return an `int`
 # get from right-clicking channel > "Copy Server ID" with dev tools enabled
 
-
-def _channel_id_maker(key: str) -> int | None:
-    try:
-        return int(getenv(key))
-    except (TypeError, ValueError):
-        return None
-
-
-CHANNEL_DEFAULT = _channel_id_maker("CHANNEL_DEFAULT")
-CHANNEL_0 = _channel_id_maker("CHANNEL_0")
+CHANNEL_ALERTS = _id_maker("CHANNEL_ALERTS")
+CHANNEL_0 = _id_maker("CHANNEL_0")
