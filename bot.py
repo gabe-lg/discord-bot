@@ -36,12 +36,9 @@ async def on_message(message: discord.Message):
     msg = msg_split(message.content)
 
     # bot should not react to its own messages
-    if message.author == c.user:
-        return
-
-    if msg[0] == c.cmd_key:
+    if message.author != c.user and msg[0] == c.cmd_key:
         try:
-            await command(c, msg, message.channel)
+            await command(c, msg, message.channel, message.author)
         except ValueError as e:
             await send_msg(c, f"Error: {e.args[0]}", message.channel)
 
