@@ -9,7 +9,8 @@ from datetime import datetime
 
 
 async def command(c: discord.Client, msg: list[str],
-                  channel: discord.TextChannel | discord.Thread):
+                  channel: discord.TextChannel | discord.Thread,
+                  author: discord.User | discord.Member):
     """
     Runs upon receiving message starting with `c.cmd_key` from Discord server.
     Executes bot commands if message contains bot commands.
@@ -17,6 +18,7 @@ async def command(c: discord.Client, msg: list[str],
     :param msg: list of words in message inputted by a user in Discord server.
     :param channel: Channel object corresponding to the channel in which the
      user sent the message.
+    :param author: object representing the sender of the message.
     :raise ValueError: if message does not contain any valid bot commands.
     """
     if len(msg) < 2:
@@ -34,25 +36,25 @@ async def command(c: discord.Client, msg: list[str],
     elif cmd == "setKey":
         await _set_key(c, msg, channel)
     elif cmd == "kill":
-        await _kill(c, msg, channel)
+        await _kill(c, channel, author)
     else:
         raise ValueError(f'"{cmd}" is not a valid command')
 
 
 async def send_msg(c: discord.Client, text: str,
-                   channel: int | discord.TextChannel | discord.Thread):
+                   channel: int | discord.TextChannel | discord.Thread = CHANNEL_0):
     """
     Sends a message to the specified channel.
     :param c:
     :param text: text to be sent.
     :param channel: id or object of target channel. Requires the corresponding
      target channel is in the discord server the bot is active in.
-     Default: `CHANNEL_DEFAULT`
+     Default: `CHANNEL_0`
     :raise ValueError: if `channel_id` is not a valid `id`.
     """
     # convert channel id to object
     if isinstance(channel, int):
-        c.get_channel(channel)
+        channel = c.get_channel(channel)
 
     if not isinstance(channel, (discord.TextChannel, discord.Thread)):
         raise ValueError(
@@ -138,9 +140,18 @@ async def _set_key(c, msg, channel):
                       "Run `$ getKey` to display current keyword.", channel)
 
 
-async def _kill(c, msg, channel):
-    """ If `msg.author.id`==`USER`, kills the bot. Otherwise, sends a text to
+async def _kill(c, channel, author):
+    """ If `author.id`==`USER_ID`, kills the bot. Otherwise, sends a text to
     `CHANNEL_ALERTS` and pass. """
+    if author.id == USER_ID:
+        await send_msg(c, "Bot killed.", channel)
+        quit()
+    else:
+        await send_msg(c, "Unauthorized", channel)
+        await send_msg(c, f"ALERT: user {author.name} attempted to kill "
+                          f"the bot\n"
+                          f"Time: {datetime.now().strftime('%H:%M:%S')}",
+                       CHANNEL_ALERTS)
 
 
 # ===== HELPER FUNCTIONS ===== #
