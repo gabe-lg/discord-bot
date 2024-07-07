@@ -9,35 +9,28 @@ A multipurpose discord bot for general purposes.
 `$ setKey [key]`: changes the keyword for regular bot commands.<br>
 `$ kill`: kills the bot.<br>
 
-# Create an `.env` file
-After cloning this repository, create a file with name `.env` inside the same directory as `bot.py`,
-then copy the following code into the file.
-<br>
-```
-; Discord token: private static token unique to the bot.
-; get from dev portal: Settings > Bot > TOKEN
-TOKEN={bot-token}
+# Usage
+Follow the link in the "About" section of this repository to add this bot to 
+your server.<br>
+<i>Note: Discord requires that you have <b>Manage server</b> permission in the 
+server.</i>
 
-; Name of guild: the public name of target Discord server.
-GUILD={guild-name}
-
-; ===== Discord channels =====
-; Channel id
-; `None` if `getenv` does not return an `int`
-; get from right-clicking channel > "Copy Server ID" with dev tools enabled
-CHANNEL_0={channel-id}
-```
-Replace the placeholder names in curly braces with actual data as specified.
-
-# Installation
-These modules are required for running this project. Install as follows:
+# Setup
+Follow these steps to create a new bot.
+1. Create a Discord bot. <br><i> See
+https://realpython.com/how-to-make-a-discord-bot-python/#creating-a-bot for 
+detailed instructions.</i>
+2. Run `git clone https://github.com/gabe-lg/discord-bot.git` to clone this 
+repository.
+3. In the home directory, rename `env.txt` into `.env`.
+4. Inside `.env`, replace the placeholder names in curly braces with actual 
+data as specified.
+5. Install modules required for the basic functionality of this app:
 ```
 pip install -U discord.py
 pip install -U python-dotenv
 ```
-
-# Usage
-In a terminal, run
+6. In a terminal, run
 <br>
 ```
 python bot.py
