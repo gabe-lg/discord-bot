@@ -34,7 +34,7 @@ async def command(c: discord.Client, msg: list[str],
     elif cmd == "setKey":
         await _set_key(c, msg, channel)
     elif cmd == "kill":
-        await _kill(c, channel)
+        await _kill(c, msg, channel)
     else:
         raise ValueError(f'"{cmd}" is not a valid command')
 
@@ -82,9 +82,7 @@ async def _echo(c: discord.Client, msg: list[str],
 
 
 async def _set_activity(c, msg, channel):
-    """
-    Changes the activity of the bot.
-    """
+    """ Changes the activity of the bot. """
     if len(msg) < 4:
         raise ValueError("setActivity: invalid syntax\n"
                          "Usage: `$ setActivity [category] [name]`")
@@ -112,17 +110,13 @@ async def _set_activity(c, msg, channel):
 
 
 async def _stop_activity(c, channel):
-    """
-    Stops all activities of the bot.
-    """
+    """ Stops all activities of the bot. """
     await c.change_presence(activity=None)
     await send_msg(c,"Successfully stopped all activities", channel)
 
 
 async def _get_key(c, channel):
-    """
-    Displays current keyword and sends it as a message to user.
-    """
+    """ Displays current keyword and sends it as a message to user. """
     await send_msg(c, "The keyword for this bot is currently set to "
                       f"`{c.cmd_key}`.", channel)
 
@@ -144,10 +138,9 @@ async def _set_key(c, msg, channel):
                       "Run `$ getKey` to display current keyword.", channel)
 
 
-@commands.is_owner()
-async def _kill(c, channel):
-    await send_msg(c, "Bot killed.", channel)
-    quit()
+async def _kill(c, msg, channel):
+    """ If `msg.author.id`==`USER`, kills the bot. Otherwise, sends a text to
+    `CHANNEL_ALERTS` and pass. """
 
 
 # ===== HELPER FUNCTIONS ===== #
