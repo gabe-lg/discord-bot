@@ -48,5 +48,8 @@ USER_ID = _id_maker("USER_ID")
 # `None` if `getenv` does not return an `int`
 # get from right-clicking channel > "Copy Server ID" with dev tools enabled
 
-CHANNEL_ALERTS = _id_maker("CHANNEL_ALERTS")
-CHANNEL_0 = _id_maker("CHANNEL_0")
+CH_ALERTS = _id_maker("CH_ALERTS")
+CH_0 = _id_maker("CH_0")
+
+VC_DEFAULT = _id_maker("VC_DEFAULT")
+VC_0 = _id_maker("VC_0")
