@@ -6,9 +6,7 @@ adapted from https://realpython.com/how-to-make-a-discord-bot-python/
 """
 from func import *
 
-intents = discord.Intents.default()
-intents.members = True
-intents.message_content = True
+intents = discord.Intents.all()
 c = discord.Client(intents=intents)
 
 # set command keyword
