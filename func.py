@@ -85,6 +85,33 @@ async def _echo(c: discord.Client, msg: list[str],
     await send_msg(c, msg[2], ch)
 
 
+async def _join(c, msg, ch):
+    """ Instructs the bot to join a voice channel. If `channel-id` is not
+    supplied, the bot will join the default voice channel. """
+    # if -c supplied
+    if len(msg) > 3 and msg[2] == "-c":
+        try:
+            vc_id = int(msg[3])
+        except (TypeError, ValueError):
+            raise ValueError("`join`: Channel ID must be an integer")
+    else:
+        vc_id = VC_DEFAULT
+
+    vc = c.get_channel(vc_id)
+    if not isinstance(vc, discord.VoiceChannel):
+        raise ValueError(
+            f'`join`: Cannot join voice channel with id "{vc_id}": '
+            "the specified channel was not found in discord server")
+
+    try:
+        await vc.connect()
+        await send_msg(c, f"Successfully joined `{vc.name}`.", ch)
+    except discord.errors.ClientException:
+        # if already in a vc
+        await send_msg(c, "Error: `join`: bot is already in a voice channel",
+                       ch)
+
+
 async def _set_activity(c, msg, ch):
     """ Changes the activity of the bot. """
     if len(msg) < 4:

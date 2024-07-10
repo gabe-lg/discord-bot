@@ -3,6 +3,8 @@ A multipurpose discord bot for general purposes.
 
 # Commands
 `$ echo [message]`: echos the message inputted by user.<br>
+`$ join -c [channel-id]`: instructs the bot to join a voice channel. If 
+`channel-id` is not supplied, the bot will join the default voice channel.<br>
 `$ setActivity [category] [name]`: changes the activity of the bot.<br>
 `$ stopActivity`: stops all activities of the bot.<br>
 `$ getKey`: displays current keyword and sends it as a message to user.<br>
@@ -29,6 +31,7 @@ data as specified.
 ```
 pip install -U discord.py
 pip install -U python-dotenv
+pip install -U pynacl
 ```
 6. In a terminal, run
 <br>
